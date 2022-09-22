@@ -10,6 +10,7 @@ int main()
     int minus;
     int prod;
     int div;
+    int answer;
 
     char Operation;
 
@@ -20,7 +21,7 @@ int main()
 
     cout << "Выберите одну из операций: +, -, *, /, ^" << "\n";
     cin >> Operation;
-
+    
     if (Operation == '+')
     {
         sum = FirstNumber + SecondNumber;
@@ -45,8 +46,16 @@ int main()
     {
         cout << "Возведение числа " << FirstNumber << " в степень " << SecondNumber << " = " << pow(FirstNumber, SecondNumber) << "\n";
     }
+
+    cout << "Повторить? 1 - да, 2 - нет"  "\n";
+    cin  >> answer;
+
+    if (answer ==1)
+    {
+        main();
+    }
+    else{
+        return 0;
+    }
     
-    
-    
-    return 0;
 }
