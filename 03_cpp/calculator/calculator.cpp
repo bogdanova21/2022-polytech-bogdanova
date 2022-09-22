@@ -1,4 +1,5 @@
 #include<iostream>
+#include <cmath>
 using namespace std;
 
 int main()
@@ -6,6 +7,9 @@ int main()
     int FirstNumber;
     int SecondNumber;
     int sum;
+    int minus;
+    int prod;
+    int div;
 
     char Operation;
 
@@ -22,6 +26,27 @@ int main()
         sum = FirstNumber + SecondNumber;
         cout << "Сумма чисел = " << sum << "\n";
     }
+    if (Operation == '-')
+    {
+        minus = FirstNumber - SecondNumber;
+        cout << "Разность чисел = " << minus << "\n";
+    }
+    if (Operation == '*')
+    {
+        prod = FirstNumber * SecondNumber;
+        cout << "Произведение чисел = " << prod << "\n";
+    }
+    if (Operation == '/')
+    {
+        div = FirstNumber / SecondNumber;
+        cout << "Частное чисел = " << div << "\n";
+    }
+    if (Operation == '^')
+    {
+        cout << "Возведение числа " << FirstNumber << " в степень " << SecondNumber << " = " << pow(FirstNumber, SecondNumber) << "\n";
+    }
+    
+    
     
     return 0;
 }
