@@ -1,26 +1,32 @@
+#ifndef JSON_HPP
+#define JSON_HPP
+
 #include <iostream>
-#include <sstream>
 #include <string>
 #include <unordered_map>
 
-struct BasicToken {
+struct IJsonToken {
   std::string value;
 };
 
-struct StringToken : public BasicToken {
-  StringToken(std::string s) { value = '"' + s + '"'; }
+struct JsonString : public IJsonToken {
+  JsonString(std::string s) { value = '"' + s + '"'; }
 };
-struct NumToken : BasicToken {
-  template <typename T> NumToken(T i) { value = std::to_string(i); }
+
+struct JsonNumber : IJsonToken {
+  template <typename T> JsonNumber(T i) { value = std::to_string(i); }
 };
-struct BoolToken : BasicToken {
-  BoolToken(bool b) { value = b ? "true" : "false"; }
+
+struct JsonBool : IJsonToken {
+  JsonBool(bool b) { value = b ? "true" : "false"; }
 };
-struct ArrayToken : BasicToken {
-  ArrayToken(std::initializer_list<BasicToken> v) {
+
+struct JsonArray : IJsonToken {
+  JsonArray(std::initializer_list<IJsonToken> v) {
     value = "[";
     for (std::size_t i = 1; auto s : v) {
       value.append(s.value);
+      // i hate it
       if (i != v.size()) {
         value.append(",");
         i++;
@@ -31,9 +37,13 @@ struct ArrayToken : BasicToken {
 };
 
 struct Json {
-  std::unordered_map<std::string, BasicToken> tokens;
+  std::unordered_map<std::string, IJsonToken> tokens = {};
 
-  Json(std::unordered_map<std::string, BasicToken> j) { tokens = j; }
+  Json(std::initializer_list<std::pair<std::string, IJsonToken>> il) {
+    for (auto it : il)
+      tokens.insert_or_assign(it.first, it.second);
+  }
+
   std::string serialize() {
     std::string out = "{";
     for (std::size_t i = 1; const auto &elem : tokens) {
@@ -48,28 +58,4 @@ struct Json {
   }
 };
 
-// int main() {
-//   // std::unordered_map<std::string, BasicToken> a = {
-//   //     {"int_token", NumToken(9090)},
-//   //     {"str_token", StringToken("hi")},
-//   //     {"bool_token", BoolToken(true)},
-//   //     {"array_token", ArrayToken({NumToken(1), StringToken("ok")})}};
-//   //
-//   // Json json{
-//   // std::unordered_map<std::string, BasicToken>{
-//   //     {"int_token", NumToken(9090)},
-//   //     {"str_token", StringToken("hi")},
-//   //     {"bool_token", BoolToken(true)},
-//   //     {"array_token", ArrayToken({NumToken(1), StringToken("ok")})}}
-//   //   };
-//   //
-//   // std::cout << json.serialize() << std::endl;
-//   std::cout << Json{std::unordered_map<std::string, BasicToken>{
-//                         {"int_token", NumToken(9090)},
-//                         {"str_token", StringToken("hi")},
-//                         {"bool_token", BoolToken(true)},
-//                         {"array_token",
-//                          ArrayToken({NumToken(1), StringToken("ok")})}}}
-//                    .serialize()
-//             << std::endl;
-// }
+#endif
